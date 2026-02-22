@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import css from "../Modal/Modal.module.css";
+import css from "@/components/Modal/Modal.module.css";
 
 type Props = {
   children: React.ReactNode;
