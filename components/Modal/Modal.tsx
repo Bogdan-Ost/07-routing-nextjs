@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, type ReactNode } from "react";
 import css from "./Modal.module.css";
 import { createPortal } from "react-dom";
@@ -5,7 +7,6 @@ interface ModalProps {
   children: ReactNode;
   onClose: () => void;
 }
-
 const modalRoot = document.querySelector("#modal-root") || document.body;
 
 export default function Modal({ children, onClose }: ModalProps) {

@@ -70,3 +70,20 @@ export const fetchNoteById = async (id: NoteId) => {
   });
   return data;
 };
+
+export type Category = {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export const getCategories = async () => {
+  const res = await axios<Category[]>(`${baseURL}/categories`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
