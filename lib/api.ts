@@ -15,6 +15,7 @@ interface settingProps {
     page: number;
     search: string;
     perPage: number;
+    tag?: string;
   };
 
   headers: { Authorization: string };
@@ -28,12 +29,17 @@ interface createNoteProps {
   };
 }
 
-export const fetchNotes = async (mysearchtext: string, page: number) => {
+export const fetchNotes = async (
+  mysearchtext: string,
+  page: number,
+  tag: string,
+) => {
   const setting: settingProps = {
     params: {
       page,
       search: mysearchtext,
       perPage: 12,
+      ...(tag.toLowerCase() !== "all" ? { tag } : {}),
     },
     headers: {
       Authorization: `Bearer ${token}`,
@@ -69,21 +75,4 @@ export const fetchNoteById = async (id: NoteId) => {
     },
   });
   return data;
-};
-
-export type Category = {
-  id: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export const getCategories = async () => {
-  const res = await axios<Category[]>(`${baseURL}/categories`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return res.data;
 };

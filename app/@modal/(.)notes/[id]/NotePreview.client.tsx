@@ -1,25 +1,71 @@
 "use client";
 
+import css from "./NotePreview.module.css";
+
 import { useRouter } from "next/navigation";
-import css from "@/components/Modal/Modal.module.css";
+import { useQuery } from "@tanstack/react-query";
 
-type Props = {
-  children: React.ReactNode;
-};
+import { fetchNoteById } from "@/lib/api";
+import Modal from "@/components/Modal/Modal";
 
-const ModalRouting = ({ children }: Props) => {
+interface NotePreviewProps {
+  id: string;
+}
+
+export default function NotePreview({ id }: NotePreviewProps) {
   const router = useRouter();
 
-  const close = () => router.back();
+  function goBack() {
+    router.back();
+  }
 
-  return (
-    <div className={css.backdrop} role="dialog" aria-modal="true">
-      <div className={css.modal}>
-        {children}
-        <button onClick={close}>Close</button>
-      </div>
-    </div>
-  );
-};
+  const {
+    data: note,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["note", id],
+    queryFn: () => fetchNoteById(id),
+    refetchOnMount: false,
+  });
 
-export default ModalRouting;
+  if (isLoading) {
+    return (
+      <Modal onClose={goBack}>
+        <p className={css.content}>Note is loading...</p>
+      </Modal>
+    );
+  } else if (isError) {
+    return (
+      <Modal onClose={goBack}>
+        <p className={css.content}>{error.message}</p>
+        <button className={css.backBtn} onClick={goBack}>
+          Go back
+        </button>
+      </Modal>
+    );
+  } else {
+    return (
+      <Modal onClose={goBack}>
+        {note && (
+          <div className={css.container}>
+            <div className={css.item}>
+              <div className={css.header}>
+                <h2>{note.title}</h2>
+                <button className={css.backBtn} onClick={goBack}>
+                  Go back
+                </button>
+              </div>
+              <p className={css.content}>{note.content}</p>
+              <p className={css.date}>
+                {note.updatedAt ? note.updatedAt : note.createdAt}
+              </p>
+              <p className={css.tag}>{note.tag}</p>
+            </div>
+          </div>
+        )}
+      </Modal>
+    );
+  }
+}
