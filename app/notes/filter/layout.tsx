@@ -5,9 +5,9 @@ type Props = {
 
 const NotesLayout = ({ children, sidebar }: Props) => {
   return (
-    <div style={{ display: "flex", gap: "20px" }}>
-      {sidebar}
-      {children}
+    <div>
+      <aside>{sidebar}</aside>
+      <div>{children}</div>
     </div>
   );
 };
