@@ -1,4 +1,4 @@
-import ModalRouting from "@/components/ModalRouting/ModalRouting";
+import ModalRouting from "@/app/@modal/(.)notes/[id]/NotePreview.client";
 import { fetchNoteById } from "@/lib/api";
 
 type Props = {
